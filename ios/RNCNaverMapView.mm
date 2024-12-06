@@ -58,12 +58,26 @@ using namespace facebook::react;
       }
 
       auto emitter = std::static_pointer_cast<RNCNaverMapViewEventEmitter const>(_eventEmitter);
-      emitter->onCameraChanged({.latitude = [dict[@"latitude"] doubleValue],
-                                .longitude = [dict[@"longitude"] doubleValue],
-                                .zoom = [dict[@"zoom"] doubleValue],
-                                .tilt = [dict[@"tilt"] doubleValue],
-                                .bearing = [dict[@"bearing"] doubleValue],
-                                .reason = [dict[@"reason"] intValue]});
+      auto arrayToVector = [](NSArray* array) {
+        std::vector<std::pair<double, double>> vector;
+        for (NSDictionary* point in array) {
+            double latitude = [point[@"latitude"] doubleValue];
+            double longitude = [point[@"longitude"] doubleValue];
+            vector.emplace_back(latitude, longitude);
+        }
+        return vector;
+      };
+
+      emitter->onCameraChanged({
+          .latitude = [dict[@"latitude"] doubleValue],
+          .longitude = [dict[@"longitude"] doubleValue],
+          .zoom = [dict[@"zoom"] doubleValue],
+          .tilt = [dict[@"tilt"] doubleValue],
+          .bearing = [dict[@"bearing"] doubleValue],
+          .reason = [dict[@"reason"] intValue],
+          .contentRegion = arrayToVector(dict[@"contentRegion"]),
+          .coveringRegion = arrayToVector(dict[@"coveringRegion"]),
+      });
     };
 
     _view.onTapMap = [self](NSDictionary* dict) {

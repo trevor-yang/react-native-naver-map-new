@@ -440,7 +440,23 @@ NMAP_MAP_SETTER(L, l, ocale, NSString*)
                   : reason == NMFMapChangedByControl  ? 2
                   : reason == NMFMapChangedByLocation ? 3
                                                       : 0),
+    @"contentRegion" : pointsToJson(mapView.contentRegion.exteriorRing.points),
+    @"coveringRegion": pointsToJson(mapView.coveringRegion.exteriorRing.points),
   });
+}
+
+static NSArray* pointsToJson(NSArray<NMGLatLng*> *points) {
+  NSMutableArray *array = [NSMutableArray array];
+  for (int i = 0; i < points.count; i++)
+    [array addObject: toJson(points[i])];
+  return array;
+}
+
+static NSDictionary* toJson(NMGLatLng * _Nonnull latlng) {
+   return @{
+    @"latitude" : @(latlng.lat),
+    @"longitude": @(latlng.lng),
+  };
 }
 
 - (void)mapView:(NMFMapView*)mapView didTapMap:(NMGLatLng*)latlng point:(CGPoint)point {

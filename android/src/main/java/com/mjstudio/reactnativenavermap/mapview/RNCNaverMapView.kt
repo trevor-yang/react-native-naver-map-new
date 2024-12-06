@@ -65,6 +65,8 @@ class RNCNaverMapView(
               REASON_LOCATION -> 3
               else -> 0
             },
+            it.getContentRegion(),
+            it.getCoveringRegion(),
           )
         }
       }
