@@ -420,8 +420,8 @@ export interface NaverMapViewProps extends ViewProps {
   onCameraChanged?: (
     params: Camera & {
       reason: CameraChangeReason;
-      contentRegion: [Coord,Coord,Coord,Coord,Coord,];
-      coveringRegion: [Coord,Coord,Coord,Coord,Coord,];
+      contentRegion: Coord[];
+      coveringRegion: Coord[];
     }
   ) => void;
 
@@ -639,8 +639,23 @@ export const NaverMapView = forwardRef(
 
     const onCameraChanged = useStableCallback(
       ({
-        nativeEvent: { bearing, latitude, longitude, reason, tilt, zoom, contentRegion, coveringRegion },
-      }: NativeSyntheticEvent<Camera & { reason: number, contentRegion: [Coord,Coord,Coord,Coord,Coord,], coveringRegion: [Coord,Coord,Coord,Coord,Coord,] }>) => {
+        nativeEvent: {
+          bearing,
+          latitude,
+          longitude,
+          reason,
+          tilt,
+          zoom,
+          contentRegion,
+          coveringRegion,
+        },
+      }: NativeSyntheticEvent<
+        Camera & {
+          reason: number;
+          contentRegion: Coord[];
+          coveringRegion: Coord[];
+        }
+      >) => {
         onCameraChangedProp?.({
           zoom,
           tilt,
@@ -649,7 +664,7 @@ export const NaverMapView = forwardRef(
           longitude,
           bearing,
           contentRegion,
-          coveringRegion
+          coveringRegion,
         });
       }
     );
