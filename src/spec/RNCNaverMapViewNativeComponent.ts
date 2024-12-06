@@ -137,6 +137,8 @@ interface Props extends ViewProps {
       tilt: Double;
       bearing: Double;
       reason: Int32 /* CameraChangeReason */;
+      contentRegion: [Coord, Coord, Coord, Coord, Coord];
+      coveringRegion: [Coord, Coord, Coord, Coord, Coord];
     }>
   >;
   onTapMap?: DirectEventHandler<
